@@ -1,14 +1,14 @@
 import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useCallback, useEffect, useState } from 'react';
-import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
-import InstructionText from './components/ui/InstructionText';
+import { ImageBackground, SafeAreaView, StyleSheet } from 'react-native';
 import colors from './constants/colors';
 import GameOverScreen from './screens/GameOverScreen';
 import GameScreen from './screens/GameScreen';
 import StartGameScreen from './screens/StartGameScreen';
 // import AppLoading from 'expo-app-loading';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -94,6 +94,9 @@ export default function App() {
 
 
     return (
+        <>
+        <StatusBar style='inverted' />
+        {/* <StatusBar backgroundColor={'green'} /> */}
         <LinearGradient colors={[colors.primary700, colors.accent500]} style={styles.container} >
             <ImageBackground source={require('./assets/images/nice.jpg')} resizeMode='cover' style={styles.container} imageStyle={styles.backgroundImg} >
                 <SafeAreaView style={styles.container} >
@@ -101,6 +104,7 @@ export default function App() {
                 </SafeAreaView>
             </ImageBackground>
         </LinearGradient>
+        </>
     );
 }
 

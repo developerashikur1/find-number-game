@@ -7,14 +7,17 @@ import PrimaryButton from '../components/ui/PrimaryButton';
 const GameOverScreen = ({ roundNumber, userNumber, onStartNewGame }) => {
     const { width, height } = useWindowDimensions();
 
+    let marginTopScreen = 100;
     let imageSize = 300
 
     if (width < 380) {
         imageSize = 180;
+        marginTopScreen = 60
     }
-
+    
     if (height < 480) {
         imageSize = 90;
+        marginTopScreen = 25
     }
 
     const dynamicImageContainer = {
@@ -27,7 +30,7 @@ const GameOverScreen = ({ roundNumber, userNumber, onStartNewGame }) => {
 
     return (
         <ScrollView style={styles.screen}>
-            <View style={styles.container}>
+            <View style={[styles.container, {marginTop: marginTopScreen}]}>
                 <Title style={styles.gameOverText}>Game Over</Title>
                 <View style={[styles.imageContainer, dynamicImageContainer]}>
                     <Image style={styles.image} source={require('../assets/images/reached.jpg')} />
