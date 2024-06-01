@@ -5,14 +5,31 @@ import colors from '../constants/colors';
 import PrimaryButton from '../components/ui/PrimaryButton';
 
 const GameOverScreen = ({ roundNumber, userNumber, onStartNewGame }) => {
-    const {width, height} = useWindowDimensions();
-    const isRotateScreenImg = height < 500 && 90;
+    const { width, height } = useWindowDimensions();
+
+    let imageSize = 300
+
+    if (width < 380) {
+        imageSize = 180;
+    }
+
+    if (height < 480) {
+        imageSize = 90;
+    }
+
+    const dynamicImageContainer = {
+        height: imageSize,
+        width: imageSize,
+        borderRadius: imageSize / 2,
+    }
+
+
 
     return (
         <ScrollView style={styles.screen}>
             <View style={styles.container}>
                 <Title style={styles.gameOverText}>Game Over</Title>
-                <View style={[styles.imageContainer, {height: isRotateScreenImg, width: isRotateScreenImg}]}>
+                <View style={[styles.imageContainer, dynamicImageContainer]}>
                     <Image style={styles.image} source={require('../assets/images/reached.jpg')} />
                 </View>
                 <Text style={styles.gameOvarDetails}>Your phone needed <Text style={styles.highlight}>{roundNumber}</Text> rounds to guess the number <Text style={styles.highlight}>{userNumber}</Text></Text>
@@ -24,7 +41,7 @@ const GameOverScreen = ({ roundNumber, userNumber, onStartNewGame }) => {
 
 export default GameOverScreen;
 
-const deviceWidth = Dimensions.get('window').width;
+// const deviceWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     screen: {
@@ -42,9 +59,9 @@ const styles = StyleSheet.create({
         // fontFamily: 'noto-serif',
     },
     imageContainer: {
-        height: deviceWidth < 380 ? 180 : 300,
-        width: deviceWidth < 380 ? 180 : 300,
-        borderRadius: deviceWidth < 380 ? 90 : 150,
+        // height: deviceWidth < 380 ? 180 : 300,
+        // width: deviceWidth < 380 ? 180 : 300,
+        // borderRadius: deviceWidth < 380 ? 90 : 150,
         overflow: 'hidden',
         borderWidth: 3,
         borderColor: 'white',
