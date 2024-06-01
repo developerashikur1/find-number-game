@@ -1,19 +1,24 @@
 import React from 'react';
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import Title from '../components/ui/Title';
 import colors from '../constants/colors';
 import PrimaryButton from '../components/ui/PrimaryButton';
 
-const GameOverScreen = ({roundNumber, userNumber, onStartNewGame}) => {
+const GameOverScreen = ({ roundNumber, userNumber, onStartNewGame }) => {
+    const {width, height} = useWindowDimensions();
+    const isRotateScreenImg = height < 500 && 90;
+
     return (
-        <View style={styles.container}>
-            <Title style={styles.gameOverText}>Game Over</Title>
-            <View style={styles.imageContainer}>
-                <Image style={styles.image} source={require('../assets/images/reached.jpg')} />
+        <ScrollView style={styles.screen}>
+            <View style={styles.container}>
+                <Title style={styles.gameOverText}>Game Over</Title>
+                <View style={[styles.imageContainer, {height: isRotateScreenImg, width: isRotateScreenImg}]}>
+                    <Image style={styles.image} source={require('../assets/images/reached.jpg')} />
+                </View>
+                <Text style={styles.gameOvarDetails}>Your phone needed <Text style={styles.highlight}>{roundNumber}</Text> rounds to guess the number <Text style={styles.highlight}>{userNumber}</Text></Text>
+                <PrimaryButton onPress={onStartNewGame} style={styles.startGameButton}>Start New Game</PrimaryButton>
             </View>
-            <Text style={styles.gameOvarDetails}>Your phone needed <Text style={styles.highlight}>{roundNumber}</Text> rounds to guess the number <Text style={styles.highlight}>{userNumber}</Text></Text>
-            <PrimaryButton onPress={onStartNewGame} style={styles.startGameButton}>Start New Game</PrimaryButton>
-        </View>
+        </ScrollView>
     );
 };
 
@@ -22,15 +27,17 @@ export default GameOverScreen;
 const deviceWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
+    screen: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         padding: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 3,
         // backgroundColor: 'green'
     },
-    gameOverText:{
+    gameOverText: {
         textTransform: 'uppercase',
         // fontFamily: 'noto-serif',
     },
@@ -48,7 +55,7 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
     },
-    gameOvarDetails:{
+    gameOvarDetails: {
         fontSize: 24,
         // fontFamily: 'noto-serif',
         textAlign: 'center',

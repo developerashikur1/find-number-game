@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import NumberContainer from '../components/game/NumberContainer';
 import PrimaryButton from '../components/ui/PrimaryButton';
 import Title from '../components/ui/Title';
@@ -7,6 +7,7 @@ import Card from '../components/ui/Card';
 import InstructionText from '../components/ui/InstructionText';
 import { Ionicons } from '@expo/vector-icons'
 import GuessLogItem from '../components/game/GuessLogItem';
+import colors from '../constants/colors';
 
 
 function generateRandomBetween(min, max, exclude) {
@@ -27,7 +28,7 @@ const GameScreen = ({ userNumber, onGameOver }) => {
     const initialGuess = generateRandomBetween(1, 100, userNumber);
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
     const [guessRounds, setGuessRounds] = useState([initialGuess])
-
+    const { width, height } = useWindowDimensions();
 
     useEffect(() => {
         if (currentGuess === userNumber) {
@@ -59,28 +60,52 @@ const GameScreen = ({ userNumber, onGameOver }) => {
 
     const guessRoundsListLength = guessRounds.length;
 
+
+    let contents = (<>
+        <NumberContainer>{currentGuess}</NumberContainer>
+        <Card style={styles.screenCardContainer}>
+            <InstructionText style={styles.buttonsText}>Higher or lower?</InstructionText>
+            <View style={styles.screenBtnContainer}>
+                <View style={styles.actionButton}>
+                    <PrimaryButton onPress={nextGuessHandler.bind(this, 'lower')}>
+                        <Ionicons name="remove-circle" size={24} color="black" />
+                    </PrimaryButton>
+                </View>
+                <View style={styles.actionButton}>
+                    <PrimaryButton onPress={nextGuessHandler.bind(this, 'higher')}>
+                        <Ionicons name="add-circle-sharp" size={24} color="black" />
+                    </PrimaryButton>
+                </View>
+            </View>
+        </Card>
+    </>);
+
+    if (width > 500) {
+        contents = (<>
+
+            <View style={styles.buttonContainerWide}>
+                <PrimaryButton onPress={nextGuessHandler.bind(this, 'lower')} style={styles.buttonWide}>
+                    <Ionicons name="remove-circle" size={24} color="white" />
+                </PrimaryButton>
+
+                <NumberContainer>{currentGuess}</NumberContainer>
+
+                <PrimaryButton onPress={nextGuessHandler.bind(this, 'higher')} style={styles.buttonWide}>
+                    <Ionicons name="add-circle-sharp" size={24} color="white" />
+                </PrimaryButton>
+            </View>
+        </>)
+    }
+
+    {/* </ScrollView> */ }
+    // <ScrollView style={styles.screen}>
     return (
         <View style={styles.screen}>
             <View style={{ justifyContent: 'center' }}>
                 <Title>Opponent's Guess</Title>
-                <NumberContainer>{currentGuess}</NumberContainer>
             </View>
             <View>
-                <Card style={styles.screenCardContainer}>
-                    <InstructionText style={styles.buttonsText}>Higher or lower?</InstructionText>
-                    <View style={styles.screenBtnContainer}>
-                        <View style={styles.actionButton}>
-                            <PrimaryButton onPress={nextGuessHandler.bind(this, 'lower')}>
-                                <Ionicons name="remove-circle" size={24} color="black" />
-                            </PrimaryButton>
-                        </View>
-                        <View style={styles.actionButton}>
-                            <PrimaryButton onPress={nextGuessHandler.bind(this, 'higher')}>
-                                <Ionicons name="add-circle-sharp" size={24} color="black" />
-                            </PrimaryButton>
-                        </View>
-                    </View>
-                </Card>
+                {contents}
             </View>
             <View style={styles.listContainer}>
                 <FlatList
@@ -119,5 +144,17 @@ const styles = StyleSheet.create({
     listContainer: {
         flex: 1,
         padding: 16,
+    },
+    buttonContainerWide:{
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    buttonWide:{
+        width: '100%',
+        maxWidth: 800,
+        paddingHorizontal: 60,
+        paddingVertical: 15,
+        backgroundColor: colors.primary500
     },
 }); 
